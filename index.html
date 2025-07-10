@@ -1,10 +1,8 @@
-Please review the below code and say yes:
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Advanced Crypto Screener with Swing Analysis</title>
+  <title>Advanced Crypto Screener with TradingView Integration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
@@ -16,7 +14,7 @@ Please review the below code and say yes:
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
-      background: linear-gradient(135deg, #0c0c14 0%, #1a1a2e 100%);
+      background: linear-gradient(135deg, #0cc14 0%, #1a1a2e 100%);
       color: #eee;
       min-height: 100vh;
       background-attachment: fixed;
@@ -77,7 +75,7 @@ Please review the below code and say yes:
       background: rgba(20, 20, 36, 0.9);
       color: #8a8ac4;
       border: none;
-      padding: 8px 15px;
+      padding: 8px 15x;
       border-radius: 20px;
       font-weight: bold;
       cursor: pointer;
@@ -95,7 +93,7 @@ Please review the below code and say yes:
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
-      max-height: 80vh;
+      max-height: 60vh;
       overflow-y: auto;
     }
    
@@ -243,7 +241,7 @@ Please review the below code and say yes:
     .correlation-cell {
       font-weight: bold;
     }
-   
+   btc
     .correlation-positive {
       color: #00ff9d;
     }
@@ -525,11 +523,128 @@ Please review the below code and say yes:
       color: #8a8ac4;
       text-decoration: none;
       transition: color 0.3s ease;
+      cursor: pointer;
     }
     
     .symbol-link:hover {
       color: #00c6ff;
       text-decoration: underline;
+    }
+
+    /* TradingView Container */
+    .tradingview-container {
+      display: none;
+      margin-top: 20px;
+      background: rgba(30, 30, 46, 0.7);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      height: 600px;
+    }
+
+    .tradingview-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+      display: flex;
+      gap: 10px;
+    }
+
+    .expand-chart-btn, .close-chart-btn {
+      background: rgba(20, 20, 36, 0.9);
+      color: #8a8ac4;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .expand-chart-btn:hover, .close-chart-btn:hover {
+      background: rgba(50, 50, 80, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .chart-header {
+      padding: 15px 20px;
+      background: rgba(20, 20, 36, 0.9);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-title {
+      font-weight: bold;
+      color: #00c6ff;
+      font-size: 1.2rem;
+    }
+
+    #tradingview-widget {
+      width: 100%;
+      height: 100%;
+    }
+
+    #tradingview-chart {
+      width: 100%;
+      height: calc(100% - 52px);
+      border: none;
+    }
+
+    .chart-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #8a8ac4;
+      font-style: italic;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .chart-placeholder i {
+      font-size: 3rem;
+      opacity: 0.5;
+    }
+
+    /* Watchlist Star Styles */
+    .watchlist-star {
+      font-size: 1.4em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .watchlist-star:hover {
+      transform: scale(1.2);
+    }
+    
+    .watchlist-star.active {
+      color: gold;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+    }
+    
+    .watchlist-btn {
+      background: #ffcc00;
+      color: #1a1a2e;
+    }
+    
+    .watchlist-btn:hover {
+      background: #e6b800;
+    }
+
+    @media (max-width: 768px) {
+      .tradingview-container {
+        height: 400px;
+      }
     }
   </style>
 </head>
@@ -537,13 +652,13 @@ Please review the below code and say yes:
   <div class="container">
     <div class="controls">
       <button class="refresh-btn" id="refresh-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0极 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
           <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
           <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
         </svg>
         Refresh Now
       </button>
-      <div class="timeframe-select极or">
+      <div class="timeframe-selector">
         <span>Analysis Timeframe:</span>
         <select id="timeframe-select">
           <option value="5m">5m</option>
@@ -558,6 +673,12 @@ Please review the below code and say yes:
           <option value="24h">24h</option>
         </select>
       </div>
+      <button class="refresh-btn watchlist-btn" id="watchlist-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+        </svg>
+        View Watchlist
+      </button>
       <div class="refresh-btn">
         Auto Refresh: Every 30 seconds
       </div>
@@ -582,6 +703,7 @@ Please review the below code and say yes:
       <table id="screener">
         <thead>
           <tr>
+            <th>Watchlist</th>
             <th>Symbol</th>
             <th>Price (USDT)</th>
             <th>15 min</th>
@@ -602,7 +724,7 @@ Please review the below code and say yes:
         </thead>
         <tbody id="screener-body">
           <tr>
-            <td colspan="16" class="loading">Loading cryptocurrency data...</td>
+            <td colspan="17" class="loading">Loading cryptocurrency data...</td>
           </tr>
         </tbody>
       </table>
@@ -611,6 +733,28 @@ Please review the below code and say yes:
     <div class="pagination" id="pagination">
       <button id="prev-btn">Previous</button>
       <button id="next-btn">Next</button>
+    </div>
+   
+    <!-- TradingView Chart Container with Widget -->
+    <div class="tradingview-container" id="tradingview-container">
+      <div class="chart-header">
+        <div class="chart-title" id="chart-title">TradingView Chart</div>
+        <div class="tradingview-controls">
+          <button class="expand-chart-btn" id="expand-chart-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+            Expand
+          </button>
+          <button class="close-chart-btn" id="close-chart-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+            Close
+          </button>
+        </div>
+      </div>
+      <div id="tradingview-chart"></div>
     </div>
    
     <div class="legend">
@@ -635,7 +779,7 @@ Please review the below code and say yes:
         <div>Trend: Upward</div>
       </div>
       <div class="legend-item">
-        <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></极div>
+        <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></div>
         <div>Trend: Downward</div>
       </div>
       <div class="legend-item">
@@ -685,6 +829,9 @@ Please review the below code and say yes:
     let filteredCryptocurrencies = [];
     let currentPage = 1;
     const itemsPerPage = 80;
+    let selectedSymbol = null;
+    let tvWidget = null; // TradingView widget instance
+    let watchlistMode = false;
    
     // Store swing pattern data
     let swingPatternData = {};
@@ -713,9 +860,70 @@ Please review the below code and say yes:
     const patternSearchBtn = document.getElementById('pattern-search-btn');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
+    const expandChartBtn = document.getElementById('expand-chart-btn');
+    const closeChartBtn = document.getElementById('close-chart-btn');
+    const tradingViewContainer = document.getElementById('tradingview-container');
+    const tradingViewChart = document.getElementById('tradingview-chart');
+    const chartTitle = document.getElementById('chart-title');
+    const watchlistBtn = document.getElementById('watchlist-btn');
    
     // Current timeframe for indicators
     let currentTimeframe = '4h';
+    
+    // Watchlist functionality
+    let watchlist = JSON.parse(localStorage.getItem('cryptoWatchlist')) || [];
+    
+    function toggleWatchlist(symbol) {
+      const index = watchlist.indexOf(symbol);
+      if (index !== -1) {
+        watchlist.splice(index, 1);
+      } else {
+        watchlist.push(symbol);
+      }
+      localStorage.setItem('cryptoWatchlist', JSON.stringify(watchlist));
+      
+      // Update the star in the table
+      const starElement = document.querySelector(`.watchlist-star[data-symbol="${symbol}"]`);
+      if (starElement) {
+        starElement.textContent = watchlist.includes(symbol) ? '★' : '☆';
+        starElement.classList.toggle('active', watchlist.includes(symbol));
+      }
+      
+      // If we're in watchlist mode, refresh the view
+      if (watchlistMode) {
+        toggleWatchlistView();
+      }
+    }
+    
+    function toggleWatchlistView() {
+      watchlistMode = !watchlistMode;
+      
+      if (watchlistMode) {
+        // Show only watchlist items
+        filteredCryptocurrencies = [...watchlist];
+        watchlistBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+          </svg>
+          View All Coins
+        `;
+        statusBar.textContent = `Showing ${watchlist.length} coins in your watchlist`;
+      } else {
+        // Show all coins
+        filteredCryptocurrencies = [...allCryptocurrencies];
+        watchlistBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+          </svg>
+          View Watchlist
+        `;
+        statusBar.textContent = `Displaying ${filteredCryptocurrencies.length} cryptocurrencies`;
+      }
+      
+      currentPage = 1;
+      createTableRows(filteredCryptocurrencies.slice(0, itemsPerPage));
+      updateData();
+    }
    
     // Format currency
     function formatCurrency(value, symbol = '') {
@@ -1143,7 +1351,7 @@ Please review the below code and say yes:
       if (cryptos.length === 0) {
         screenerBody.innerHTML = `
           <tr>
-            <td colspan="16" class="loading">No cryptocurrencies found matching your search</td>
+            <td colspan="17" class="loading">No cryptocurrencies found matching your search</td>
           </tr>
         `;
         return;
@@ -1152,16 +1360,22 @@ Please review the below code and say yes:
       // Create rows for each cryptocurrency
       cryptos.forEach(symbol => {
         const symbolName = symbol.replace('USDT', '');
+        const isInWatchlist = watchlist.includes(symbol);
        
         // Create table row with TradingView link
         const row = document.createElement('tr');
         row.id = `row-${symbol}`;
        
         row.innerHTML = `
+          <td class="watchlist-cell">
+            <span class="watchlist-star ${isInWatchlist ? 'active' : ''}" data-symbol="${symbol}">
+              ${isInWatchlist ? '★' : '☆'}
+            </span>
+          </td>
           <td>
             <div class="symbol-cell">
               <div class="coin-logo">${symbolName.substring(0, 2)}</div>
-              <a href="https://www.tradingview.com/chart/?symbol=BINANCE:${symbol}" target="_blank" class="symbol-link">
+              <a class="symbol-link" data-symbol="${symbol}">
                 ${symbolName}
               </a>
             </div>
@@ -1190,7 +1404,7 @@ Please review the below code and say yes:
           <td class="data-cell" id="volatility-${symbol}">
             <div class="loading">...</div>
           </td>
-          <td class="data-cell" id极="change-${symbol}-1w">
+          <td class="data-cell" id="change-${symbol}-1w">
             <div class="loading">...</div>
           </td>
           <td class="data-cell" id="change-${symbol}-1M">
@@ -1479,10 +1693,70 @@ Please review the below code and say yes:
         statusBar.textContent = `Error loading USDT pairs: ${error.message}`;
         screenerBody.innerHTML = `
           <tr>
-            <td colspan="16" class="loading">Error loading cryptocurrency data: ${error.message}</td>
+            <td colspan="17" class="loading">Error loading cryptocurrency data: ${error.message}</td>
           </tr>
         `;
       }
+    }
+
+    // Load TradingView widget for selected symbol
+    function loadTradingViewWidget(symbol) {
+      // Remove any existing widget
+      if (tvWidget !== null) {
+        tvWidget.remove();
+        tvWidget = null;
+      }
+      
+      // Create container for the widget
+      const container = document.createElement('div');
+      container.id = 'tradingview-widget';
+      container.style.width = '100%';
+      container.style.height = '100%';
+      
+      // Clear the chart container and add new widget container
+      tradingViewChart.innerHTML = '';
+      tradingViewChart.appendChild(container);
+      
+      // Initialize the TradingView widget
+      tvWidget = new TradingView.widget({
+        "autosize": true,
+        "symbol": `BINANCE:${symbol}`,
+        "interval": "15",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#0c0c14",
+        "enable_publishing": false,
+        "hide_top_toolbar": false,
+        "hide_legend": true,
+        "save_image": false,
+        "container_id": "tradingview-widget"
+      });
+    }
+
+    // Load TradingView chart for selected symbol
+    function loadTradingViewChart(symbol) {
+      selectedSymbol = symbol;
+      const symbolName = symbol.replace('USDT', '');
+      chartTitle.textContent = `${symbolName}/USDT Chart`;
+      
+      // Show container if hidden
+      tradingViewContainer.style.display = 'block';
+      
+      // Load TradingView library if not already loaded
+      if (typeof TradingView === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://s3.tradingview.com/tv.js';
+        script.async = true;
+        script.onload = () => loadTradingViewWidget(symbol);
+        document.head.appendChild(script);
+      } else {
+        loadTradingViewWidget(symbol);
+      }
+      
+      // Scroll to chart
+      tradingViewContainer.scrollIntoView({ behavior: 'smooth' });
     }
    
     // Initial setup
@@ -1499,7 +1773,7 @@ Please review the below code and say yes:
       refreshBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="spin">
           <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-          <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.极36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+          <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
         </svg>
         Refreshing...
       `;
@@ -1559,6 +1833,43 @@ Please review the below code and say yes:
         createTableRows(filteredCryptocurrencies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
         updateData();
       }
+    });
+
+    // TradingView chart controls
+    expandChartBtn.addEventListener('click', () => {
+      if (selectedSymbol) {
+        window.open(`https://www.tradingview.com/chart/?symbol=BINANCE:${selectedSymbol}`, '_blank');
+      }
+    });
+
+    closeChartBtn.addEventListener('click', () => {
+      tradingViewContainer.style.display = 'none';
+      // Remove the widget to free resources
+      if (tvWidget !== null) {
+        tvWidget.remove();
+        tvWidget = null;
+      }
+    });
+
+    // Symbol click handler
+    screenerBody.addEventListener('click', (e) => {
+      const symbolLink = e.target.closest('.symbol-link');
+      if (symbolLink) {
+        const symbol = symbolLink.dataset.symbol;
+        loadTradingViewChart(symbol);
+      }
+      
+      // Watchlist star click handler
+      const star = e.target.closest('.watchlist-star');
+      if (star) {
+        const symbol = star.dataset.symbol;
+        toggleWatchlist(symbol);
+      }
+    });
+    
+    // Watchlist button click handler
+    watchlistBtn.addEventListener('click', () => {
+      toggleWatchlistView();
     });
    
     // Add spin animation for refresh icon

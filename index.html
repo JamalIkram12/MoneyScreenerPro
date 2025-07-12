@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Advanced Crypto Screener with Swing Analysis</title>
+  <title>Advanced Crypto Screener with Technical Indicators</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
@@ -10,7 +10,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-   
+  
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
@@ -20,12 +20,33 @@
       background-attachment: fixed;
       overflow-x: hidden;
     }
-   
+  
     .container {
       max-width: 1800px;
       margin: 0 auto;
     }
    
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+   
+    .title {
+      font-size: 2.2rem;
+      background: linear-gradient(90deg, #00c6ff, #00ff9d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+    }
+   
+    .subtitle {
+      color: #8a8ac4;
+      font-size: 1rem;
+    }
+  
     .controls {
       display: flex;
       justify-content: center;
@@ -33,7 +54,7 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
-   
+  
     .refresh-btn {
       background: #0072ff;
       color: white;
@@ -48,17 +69,17 @@
       gap: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
-   
+  
     .refresh-btn:hover {
       background: #0056cc;
       transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 6极px 8px rgba(0,0,0,0.3);
     }
-   
+  
     .refresh-btn:active {
       transform: translateY(0);
     }
-   
+  
     .timeframe-selector {
       background: rgba(30, 30, 46, 0.7);
       color: #eee;
@@ -70,7 +91,7 @@
       gap: 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
-   
+  
     .timeframe-selector select {
       background: rgba(20, 20, 36, 0.9);
       color: #8a8ac4;
@@ -81,11 +102,11 @@
       cursor: pointer;
       outline: none;
     }
-   
+  
     .timeframe-selector select:focus {
       box-shadow: 0 0 0 2px rgba(0, 100, 255, 0.5);
     }
-   
+  
     .screener-container {
       background: rgba(30, 30, 46, 0.7);
       border-radius: 15px;
@@ -96,12 +117,12 @@
       max-height: 80vh;
       overflow-y: auto;
     }
-   
+  
     table {
       width: 100%;
       border-collapse: collapse;
     }
-   
+  
     th {
       background: rgba(20, 20, 36, 0.9);
       padding: 16px 12px;
@@ -114,22 +135,22 @@
       position: sticky;
       top: 0;
     }
-   
+  
     td {
       padding: 14px 12px;
       text-align: center;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       transition: background-color 0.5s ease;
     }
-   
+  
     tr:last-child td {
       border-bottom: none;
     }
-   
+  
     tr:hover {
       background: rgba(50, 50, 80, 0.4);
     }
-   
+  
     .symbol-cell {
       font-weight: bold;
       display: flex;
@@ -137,14 +158,14 @@
       justify-content: center;
       gap: 10px;
     }
-   
+  
     .loading {
       text-align: center;
       padding: 40px;
       color: #8a8ac4;
       font-style: italic;
     }
-   
+  
     footer {
       text-align: center;
       margin-top: 30px;
@@ -152,109 +173,125 @@
       color: #8a8ac4;
       font-size: 0.9rem;
     }
-   
+  
     .positive-bg {
       background: rgba(0, 255, 157, 0.05);
     }
-   
+  
     .negative-bg {
       background: rgba(255, 77, 125, 0.05);
     }
-   
+  
     .data-cell {
       transition: all 0.5s ease;
     }
-   
+  
     .updating {
       animation: highlight 0.8s ease;
     }
-   
+  
     .ema-indicator {
       font-weight: bold;
       padding: 5px 10px;
       border-radius: 20px;
       display: inline-block;
     }
-   
+  
     .ema-above {
       background: rgba(0, 255, 157, 0.2);
       color: #00ff9d;
     }
-   
-    .ema-below {
+  
+极   .ema-below {
       background: rgba(255, 77, 125, 0.2);
-      color: #ff4d7d;
+      color: #ff4d7极d;
     }
-   
+  
     .macd-indicator {
       font-weight: bold;
       padding: 5px 10px;
       border-radius: 20px;
       display: inline-block;
     }
-   
+  
     .macd-bullish {
       background: rgba(0, 255, 157, 0.2);
       color: #00ff9d;
     }
-   
+  
     .macd-bearish {
       background: rgba(255, 77, 125, 0.2);
       color: #ff4d7d;
     }
-   
+  
     .trend-upward {
       background: rgba(0, 255, 157, 0.2);
       color: #00ff9d;
     }
-   
+  
     .trend-downward {
       background: rgba(255, 77, 125, 0.2);
       color: #ff4d7d;
     }
-   
+  
     .trend-choppy {
       background: rgba(173, 216, 230, 0.2);
       color: #add8e6;
     }
-   
+  
     .pattern-higher-high {
       background: rgba(0, 255, 157, 0.2);
       color: #00ff9d;
     }
-   
+  
     .pattern-lower-low {
       background: rgba(255, 77, 125, 0.2);
       color: #ff4d7d;
     }
-   
+  
     .pattern-none {
       background: rgba(173, 216, 230, 0.2);
       color: #add8e6;
     }
-   
+  
     .pattern-consolidation {
       background: rgba(147, 112, 219, 0.2);
       color: #9370db;
     }
-   
+  
     .correlation-cell {
       font-weight: bold;
     }
-   
+  
     .correlation-positive {
       color: #00ff9d;
     }
-   
+  
     .correlation-negative {
       color: #ff4d7d;
     }
+
+    .rsi-bullish-div {
+      background: rgba(0, 255, 157, 0.2);
+      color: #00ff9d;
+    }
+
+    .rsi-bearish-div {
+      background: rgba(255, 77, 125, 0.2);
+      color: #ff4d7d;
+    }
    
+    .indicator-error {
+      background: rgba(255, 0, 0, 0.1);
+      color: #ff4d4d;
+      font-size: 0.8em;
+    }
+  
     @keyframes highlight {
       0% { background-color: rgba(0, 100, 255, 0.3); }
       100% { background-color: transparent; }
     }
-   
+  
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(0, 100, 255, 0.4); }
       70% { box-shadow: 0 0 0 10px rgba(0, 100, 255, 0); }
@@ -265,31 +302,51 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-   
+  
     @media (max-width: 1600px) {
       .screener-container {
         overflow-x: auto;
       }
-     
+    
       table {
-        min-width: 1400px;
+        min-width: 1500px;
       }
     }
-   
+  
     @media (max-width: 768px) {
       th, td {
         padding: 12px 8px;
         font-size: 0.85rem;
       }
+     
+      .controls {
+        gap: 10px;
+      }
+     
+      .timeframe-selector {
+        padding: 10px;
+      }
+     
+      .refresh-btn {
+        padding: 10px 15px;
+      }
     }
-   
+  
     @media (max-width: 480px) {
       .controls {
         flex-direction: column;
         align-items: center;
       }
+     
+      .search-header {
+        flex-direction: column;
+      }
+     
+      .search-box {
+        min-width: 100%;
+      }
     }
-   
+  
     .coin-logo {
       width: 28px;
       height: 28px;
@@ -301,22 +358,22 @@
       font-weight: bold;
       font-size: 14px;
     }
-   
+  
     .price-up {
       color: #00ff9d;
     }
-   
+  
     .price-down {
       color: #ff4d7d;
     }
-   
+  
     .indicator-title {
       display: block;
       font-size: 0.8em;
       color: #8a8ac4;
       margin-bottom: 3px;
     }
-   
+  
     .legend {
       display: flex;
       justify-content: center;
@@ -324,7 +381,7 @@
       margin-top: 20px;
       flex-wrap: wrap;
     }
-   
+  
     .legend-item {
       display: flex;
       align-items: center;
@@ -334,44 +391,13 @@
       border-radius: 20px;
       font-size: 0.85rem;
     }
-   
+  
     .legend-color {
       width: 16px;
       height: 16px;
       border-radius: 4px;
     }
-   
-    .pattern-explanation {
-      background: rgba(30, 30, 46, 0.7);
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-   
-    .pattern-explanation h3 {
-      color: #00c6ff;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-   
-    .pattern-explanation ul {
-      padding-left: 20px;
-      margin-bottom: 10px;
-    }
-   
-    .pattern-explanation li {
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-   
-    .pattern-explanation .highlight {
-      color: #00ff9d;
-      font-weight: bold;
-    }
-   
+  
     .swing-info {
       display: flex;
       justify-content: center;
@@ -379,33 +405,33 @@
       margin-top: 15px;
       font-size: 0.9rem;
     }
-   
+  
     .swing-high, .swing-low {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-   
+  
     .swing-high::before {
       content: "▲";
       color: #00ff9d;
       font-size: 1.2rem;
     }
-   
+  
     .swing-low::before {
       content: "▼";
       color: #ff4d7d;
       font-size: 1.2rem;
     }
-   
-    .search-container {
+  
+    .search-header {
       display: flex;
       justify-content: center;
       gap: 15px;
       margin: 0 auto 20px;
       flex-wrap: wrap;
     }
-   
+  
     .search-box {
       background: rgba(30, 30, 46, 0.7);
       padding: 10px 20px;
@@ -415,7 +441,7 @@
       gap: 10px;
       min-width: 300px;
     }
-   
+  
     .search-box input {
       background: rgba(20, 20, 36, 0.9);
       color: white;
@@ -424,7 +450,7 @@
       border-radius: 20px;
       width: 100%;
     }
-   
+  
     .search-box button {
       background: #0072ff;
       color: white;
@@ -434,21 +460,22 @@
       cursor: pointer;
       font-weight: bold;
     }
-   
+  
     .status-bar {
       text-align: center;
       margin-bottom: 15px;
       color: #8a8ac4;
       font-size: 0.9rem;
+      min-height: 20px;
     }
-   
+  
     .pagination {
       display: flex;
       justify-content: center;
       gap: 10px;
       margin-top: 20px;
     }
-   
+  
     .pagination button {
       background: rgba(30, 30, 46, 0.7);
       color: #8a8ac4;
@@ -459,11 +486,11 @@
       transition: all 0.3s;
       border: 1px solid rgba(255,255,255,0.1);
     }
-   
+  
     .pagination button:hover {
       background: rgba(50, 50, 80, 0.7);
     }
-   
+  
     .pagination button.active {
       background: #0072ff;
       color: white;
@@ -473,33 +500,25 @@
     .value-transition {
       transition: all 0.8s ease;
     }
-   
+  
     .value-up {
       animation: value-up 0.8s ease;
     }
-   
+  
     .value-down {
       animation: value-down 0.8s ease;
     }
-   
+  
     @keyframes value-up {
       0% { background-color: rgba(0, 255, 157, 0.1); }
       100% { background-color: transparent; }
     }
-   
+  
     @keyframes value-down {
       0% { background-color: rgba(255, 77, 125, 0.1); }
       100% { background-color: transparent; }
     }
-   
-    .search-header {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-   
+  
     .performance-optimization {
       position: fixed;
       bottom: 10px;
@@ -512,19 +531,19 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
       border: 1px solid rgba(255,255,255,0.1);
     }
-   
+  
     .performance-optimization .highlight {
       color: #00ff9d;
       font-weight: bold;
     }
-    
+   
     /* Added for TradingView links */
     .symbol-link {
       color: #8a8ac4;
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    
+   
     .symbol-link:hover {
       color: #00c6ff;
       text-decoration: underline;
@@ -533,16 +552,21 @@
 </head>
 <body>
   <div class="container">
+    <div class="header">
+      <h1 class="title">Crypto Technical Screener</h1>
+      <div class="subtitle">Real-time indicators with RSI Divergence detection</div>
+    </div>
+   
     <div class="controls">
       <button class="refresh-btn" id="refresh-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0极 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
           <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
           <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
         </svg>
         Refresh Now
       </button>
-      <div class="timeframe-select极or">
-        <span>Analysis Timeframe:</span>
+      <div class="timeframe-selector">
+        <span>Timeframe:</span>
         <select id="timeframe-select">
           <option value="5m">5m</option>
           <option value="15m">15m</option>
@@ -557,25 +581,25 @@
         </select>
       </div>
       <div class="refresh-btn">
-        Auto Refresh: Every 30 seconds
+        Auto Refresh: 30s
       </div>
       <div class="last-updated" id="last-updated">Last updated: --:--:--</div>
     </div>
-   
+  
     <div class="search-header">
       <div class="search-box">
         <input type="text" id="symbol-search" placeholder="Search by symbol (e.g. BTC, ETH)">
         <button id="symbol-search-btn">Find</button>
       </div>
-     
+    
       <div class="search-box">
         <input type="text" id="pattern-search" placeholder="Search by pattern (e.g. Higher, Lower, Consolidation)">
         <button id="pattern-search-btn">Find</button>
       </div>
     </div>
-   
+  
     <div class="status-bar" id="status-bar">Loading all Binance USDT pairs...</div>
-   
+  
     <div class="screener-container">
       <table id="screener">
         <thead>
@@ -588,93 +612,59 @@
             <th>2 hours</th>
             <th>4 hours</th>
             <th>24 hours</th>
-            <th>24H Volatility</th>
+            <th>24H Vol</th>
             <th>1 week</th>
             <th>30 days</th>
             <th>EMA 34</th>
             <th>MACD</th>
-            <th>Market Trend</th>
-            <th>Swing Pattern</th>
-            <th>BTC Correlation</th>
+            <th>MACD Cross</th>
+            <th>Trend</th>
+            <th>Swing</th>
+            <th>BTC Corr</th>
+            <th>RSI Div</th>
           </tr>
         </thead>
         <tbody id="screener-body">
           <tr>
-            <td colspan="16" class="loading">Loading cryptocurrency data...</td>
+            <td colspan="18" class="loading">Loading cryptocurrency data...</td>
           </tr>
         </tbody>
       </table>
     </div>
-   
+  
     <div class="pagination" id="pagination">
       <button id="prev-btn">Previous</button>
       <button id="next-btn">Next</button>
     </div>
-   
+  
     <div class="legend">
       <div class="legend-item">
         <div class="legend-color" style="background: rgba(0, 255, 157, 0.2);"></div>
-        <div>EMA 34: Above</div>
+        <div>Bullish Signal</div>
       </div>
       <div class="legend-item">
         <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></div>
-        <div>EMA 34: Below</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(0, 255, 157, 0.2);"></div>
-        <div>MACD: Bullish</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></div>
-        <div>MACD: Bearish</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(0, 255, 157, 0.2);"></div>
-        <div>Trend: Upward</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></极div>
-        <div>Trend: Downward</div>
+        <div>Bearish Signal</div>
       </div>
       <div class="legend-item">
         <div class="legend-color" style="background: rgba(173, 216, 230, 0.2);"></div>
-        <div>Trend: Choppy</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(0, 255, 157, 0.2);"></div>
-        <div>Pattern: Higher High</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></div>
-        <div>Pattern: Lower Low</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(173, 216, 230, 0.2);"></div>
-        <div>Pattern: None</div>
+        <div>Neutral</div>
       </div>
       <div class="legend-item">
         <div class="legend-color" style="background: rgba(147, 112, 219, 0.2);"></div>
-        <div>Pattern: Consolidation</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(0, 255, 157, 0.2);"></div>
-        <div>Correlation: High</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: rgba(255, 77, 125, 0.2);"></div>
-        <div>Correlation: Low</div>
+        <div>Consolidation</div>
       </div>
     </div>
-   
+  
     <footer>
-      Data provided by Binance API | Real-time updates every 30 seconds | Showing 80 cryptocurrencies per page
+      Data provided by Binance API | Real-time updates every 30 seconds | Showing 50 cryptocurrencies per page
     </footer>
   </div>
- 
+
   <div class="performance-optimization">
-    Performance optimized: <span class="highlight">80 assets per page</span> |
-    <span class="highlight">Concurrent API requests</span> |
-    <span class="highlight">Debounced search</span>
+    Performance optimized: <span class="highlight">50 assets per page</span> |
+    <span class="highlight">Error handling</span> |
+    <span class="highlight">Stable indicators</span>
   </div>
 
   <script>
@@ -682,11 +672,11 @@
     let allCryptocurrencies = [];
     let filteredCryptocurrencies = [];
     let currentPage = 1;
-    const itemsPerPage = 80;
-   
+    const itemsPerPage = 50; // Reduced to prevent rate limiting
+  
     // Store swing pattern data
     let swingPatternData = {};
-   
+  
     // Interval configuration for price changes
     const intervals = {
       '15m': '15m',
@@ -698,7 +688,7 @@
       '1w': '1w',
       '1M': '1M'
     };
-   
+  
     // DOM elements
     const screenerBody = document.getElementById('screener-body');
     const lastUpdatedEl = document.getElementById('last-updated');
@@ -711,45 +701,46 @@
     const patternSearchBtn = document.getElementById('pattern-search-btn');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
-   
+  
     // Current timeframe for indicators
     let currentTimeframe = '4h';
-   
+  
     // Format currency
     function formatCurrency(value, symbol = '') {
+      if (isNaN(value)) return 'N/A';
       return symbol + parseFloat(value).toLocaleString('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: value < 10 ? 4 : 2
       });
     }
-   
+  
     // Update timestamp display
     function updateTimestamp() {
       const now = new Date();
       const timeString = now.toLocaleTimeString();
       lastUpdatedEl.textContent = `Last updated: ${timeString}`;
     }
-   
+  
     // Get price changes for a specific symbol
     async function getPriceChanges(symbol) {
       const changes = {};
-     
+    
       for (const [label, interval] of Object.entries(intervals)) {
         try {
           const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=2`;
           const res = await fetch(url);
-         
+        
           if (!res.ok) {
             throw new Error(`API error: ${res.status}`);
           }
-         
+        
           const klines = await res.json();
-         
+        
           if (klines.length < 2) {
             changes[label] = '0.00';
             continue;
           }
-         
+        
           const open = parseFloat(klines[0][1]);
           const close = parseFloat(klines[1][4]);
           changes[label] = (((close - open) / open) * 100).toFixed(2);
@@ -758,19 +749,19 @@
           changes[label] = '0.00'; // Default to 0 on error
         }
       }
-     
+    
       return changes;
     }
-   
+  
     // Get current price
     async function getPrice(symbol) {
       try {
         const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
-       
+      
         if (!res.ok) {
             throw new Error(`API error: ${res.status}`);
         }
-       
+      
         const data = await res.json();
         return parseFloat(data.price);
       } catch (error) {
@@ -778,31 +769,31 @@
         return 0; // Default to 0 on error
       }
     }
-   
+  
     // Calculate 24-hour volatility
     async function get24hVolatility(symbol) {
       try {
         const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=24`;
         const res = await fetch(url);
-       
+      
         if (!res.ok) {
           throw new Error(`API error: ${res.status}`);
         }
-       
+      
         const klines = await res.json();
         if (klines.length < 2) return '0.00';
-       
+      
         const closes = klines.map(k => parseFloat(k[4]));
         let priceChanges = [];
-       
+      
         for (let i = 1; i < closes.length; i++) {
           const change = (closes[i] - closes[i-1]) / closes[i-1];
           priceChanges.push(change);
         }
-       
+      
         // Calculate mean
         const mean = priceChanges.reduce((a, b) => a + b, 0) / priceChanges.length;
-       
+      
         // Calculate variance
         let variance;
         if (priceChanges.length <= 1) {
@@ -812,7 +803,7 @@
             sum + Math.pow(change - mean, 2), 0);
           variance = squaredDiffs / (priceChanges.length - 1);
         }
-       
+      
         const volatility = Math.sqrt(variance) * 100;
         return volatility.toFixed(2);
       } catch (error) {
@@ -820,181 +811,195 @@
         return '0.00';
       }
     }
-   
-    // Calculate correlation with BTC
+  
+    // Calculate correlation with BTC (FIXED)
     async function getCorrelationWithBTC(symbol) {
       try {
         // Fetch BTC data
         const btcUrl = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=24';
         const btcRes = await fetch(btcUrl);
-       
+      
         if (!btcRes.ok) {
           throw new Error('Failed to fetch BTC data');
         }
-       
+      
         const btcKlines = await btcRes.json();
         if (btcKlines.length < 2) return null;
-       
+      
         const btcCloses = btcKlines.map(k => parseFloat(k[4]));
-       
+      
         // Fetch coin data
         const coinUrl = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=24`;
         const coinRes = await fetch(coinUrl);
-       
+      
         if (!coinRes.ok) {
           throw new Error('Failed to fetch coin data');
         }
-       
+      
         const coinKlines = await coinRes.json();
         if (coinKlines.length < 2) return null;
-       
+      
         const coinCloses = coinKlines.map(k => parseFloat(k[4]));
-       
+      
+        // Align data by taking the same number of points (min length)
+        const minLength = Math.min(btcCloses.length, coinCloses.length);
+        const btcSlice = btcCloses.slice(-minLength);
+        const coinSlice = coinCloses.slice(-minLength);
+      
         // Calculate returns
         const btcReturns = [];
-        for (let i = 1; i < btcCloses.length; i++) {
-          btcReturns.push((btcCloses[i] - btcCloses[i-1]) / btcCloses[i-1]);
-        }
-       
         const coinReturns = [];
-        for (let i = 1; i < coinCloses.length; i++) {
-          coinReturns.push((coinCloses[i] - coinCloses[i-1]) / coinCloses[i-1]);
+      
+        for (let i = 1; i < minLength; i++) {
+          btcReturns.push((btcSlice[i] - btcSlice[i-1]) / btcSlice[i-1]);
+          coinReturns.push((coinSlice[i] - coinSlice[i-1]) / coinSlice[i-1]);
         }
-       
+      
         // Ensure both arrays have the same length
-        const minLength = Math.min(btcReturns.length, coinReturns.length);
-        if (minLength < 2) return null;
-       
-        const btcSlice = btcReturns.slice(0, minLength);
-        const coinSlice = coinReturns.slice(0, minLength);
-       
+        if (btcReturns.length !== coinReturns.length || btcReturns.length < 2) {
+          return null;
+        }
+      
         // Calculate means
-        const btcMean = btcSlice.reduce((a, b) => a + b, 0) / minLength;
-        const coinMean = coinSlice.reduce((a, b) => a + b, 0) / minLength;
-       
+        const btcMean = btcReturns.reduce((a, b) => a + b, 0) / btcReturns.length;
+        const coinMean = coinReturns.reduce((a, b) => a + b, 0) / coinReturns.length;
+      
         // Calculate covariance and variances
         let covariance = 0;
         let btcVariance = 0;
         let coinVariance = 0;
-       
-        for (let i = 0; i < minLength; i++) {
-          covariance += (btcSlice[i] - btcMean) * (coinSlice[i] - coinMean);
-          btcVariance += Math.pow(btcSlice[i] - btcMean, 2);
-          coinVariance += Math.pow(coinSlice[i] - coinMean, 2);
+      
+        for (let i = 0; i < btcReturns.length; i++) {
+          covariance += (btcReturns[i] - btcMean) * (coinReturns[i] - coinMean);
+          btcVariance += Math.pow(btcReturns[i] - btcMean, 2);
+          coinVariance += Math.pow(coinReturns[i] - coinMean, 2);
         }
-       
-        covariance = covariance / (minLength - 1);
-        btcVariance = btcVariance / (minLength - 1);
-        coinVariance = coinVariance / (minLength - 1);
-       
+      
+        covariance = covariance / (btcReturns.length - 1);
+        btcVariance = btcVariance / (btcReturns.length - 1);
+        coinVariance = coinVariance / (btcReturns.length - 1);
+      
         const btcStdDev = Math.sqrt(btcVariance);
         const coinStdDev = Math.sqrt(coinVariance);
-       
+      
         // Calculate correlation
         const correlation = covariance / (btcStdDev * coinStdDev);
         return isNaN(correlation) ? null : correlation;
-       
+      
       } catch (error) {
         console.error(`Error calculating correlation for ${symbol}:`, error);
         return null;
       }
     }
-   
-    // Calculate EMA
+  
+    // Fixed EMA calculation
     function calculateEMA(prices, period) {
       if (prices.length < period) return null;
-     
+    
       // Start with SMA for the first value
       let ema = prices.slice(0, period).reduce((a, b) => a + b, 0) / period;
-     
+    
       // Smoothing factor
       const k = 2 / (period + 1);
-     
+    
       // Calculate EMA for the rest of the data
       for (let i = period; i < prices.length; i++) {
         ema = (prices[i] * k) + (ema * (1 - k));
       }
-     
+    
       return ema;
     }
-   
+  
     // Helper function to calculate an array of EMA values
     function calculateEMAArray(prices, period) {
       if (prices.length < period) return null;
-     
+    
       const k = 2 / (period + 1);
       const emaArray = [];
-     
+    
       // Start with SMA for the first value
       let sma = prices.slice(0, period).reduce((a, b) => a + b, 0) / period;
       emaArray.push(sma);
-     
+    
       // Calculate the rest of the EMA values
       for (let i = period; i < prices.length; i++) {
         const ema = (prices[i] * k) + (emaArray[emaArray.length - 1] * (1 - k));
         emaArray.push(ema);
       }
-     
+    
       return emaArray;
     }
-   
-    // Fixed MACD calculation
+  
+    // Fixed MACD calculation with crossover detection
     function calculateMACD(prices) {
       // We need at least 35 periods to have at least 9 MACD values for the signal line
       if (prices.length < 35) return null;
-     
+    
       // Calculate the 12-period and 26-period EMAs
       const ema12 = calculateEMAArray(prices, 12);
       const ema26 = calculateEMAArray(prices, 26);
      
+      if (!ema12 || !ema26) return null;
+    
       // The ema26 array is shorter than ema12 by (26-12)=14 periods
       const minLength = Math.min(ema12.length, ema26.length);
       const startIndex12 = ema12.length - minLength;
       const startIndex26 = ema26.length - minLength;
-     
+    
       // Compute MACD line: subtract the 26-period EMA from the 12-period EMA
       const macdLine = [];
       for (let i = 0; i < minLength; i++) {
         macdLine.push(ema12[startIndex12 + i] - ema26[startIndex26 + i]);
       }
-     
+    
       // Now compute the signal line (9-period EMA of the MACD line)
       const signalLine = calculateEMAArray(macdLine, 9);
-      if (!signalLine || signalLine.length < 1) return null;
-     
-      // The current MACD and signal are the last values in the arrays
+      if (!signalLine || signalLine.length < 2) return null;
+    
+      // Get the last two values for crossover detection
       const currentMACD = macdLine[macdLine.length - 1];
+      const previousMACD = macdLine[macdLine.length - 2];
       const currentSignal = signalLine[signalLine.length - 1];
+      const previousSignal = signalLine[signalLine.length - 2];
      
+      // Determine crossover
+      let crossover = null;
+      if (previousMACD <= previousSignal && currentMACD > currentSignal) {
+        crossover = 'bullish';
+      } else if (previousMACD >= previousSignal && currentMACD < currentSignal) {
+        crossover = 'bearish';
+      }
+    
       return {
         macd: currentMACD,
         signal: currentSignal,
-        bullish: currentMACD > currentSignal
+        bullish: currentMACD > currentSignal,
+        crossover: crossover
       };
     }
-   
+  
     // Determine market trend
     function determineMarketTrend(closes, currentPrice) {
       if (closes.length < 34) return null;
-     
+    
       // Calculate EMA 34 for entire period
       const ema34 = calculateEMA(closes, 34);
       if (!ema34) return null;
-     
+    
       // Calculate EMA for the last 20 periods
       const shortPeriod = Math.min(20, closes.length - 1);
       const recentCloses = closes.slice(-shortPeriod);
       const emaShort = calculateEMA(recentCloses, 10);
       if (!emaShort) return null;
-     
+    
       // Calculate price volatility
       const priceChanges = recentCloses.map((c, i, arr) => i > 0 ? c - arr[i-1] : 0).slice(1);
       const volatility = Math.sqrt(priceChanges.reduce((sum, change) => sum + Math.pow(change, 2), 0) / priceChanges.length);
-     
+    
       // Determine trend based on EMA position and volatility
       if (currentPrice > ema34 && currentPrice > emaShort) {
         return 'upward';
-      } else if (currentPrice < ema34 && currentPrice < emaShort) {
+      } else if (currentPrice < ema34 && current极Price < emaShort) {
         return 'downward';
       } else if (volatility < 0.01) {
         return 'choppy';
@@ -1002,17 +1007,17 @@
         return 'choppy';
       }
     }
-   
+  
     // Find swing highs and lows in price data
     function findSwingPoints(prices, windowSize = 5) {
       const swingHighs = [];
       const swingLows = [];
-     
+    
       for (let i = windowSize; i < prices.length - windowSize; i++) {
         let isHigh = true;
         let isLow = true;
         const current = prices[i];
-       
+      
         // Check if current point is higher than neighbors
         for (let j = 1; j <= windowSize; j++) {
           if (prices[i - j] >= current || prices[i + j] >= current) {
@@ -1022,70 +1027,181 @@
             isLow = false;
           }
         }
-       
+      
         if (isHigh) swingHighs.push({index: i, price: current});
         if (isLow) swingLows.push({index: i, price: current});
       }
-     
+    
       return { swingHighs, swingLows };
     }
-   
+
+    // Fixed RSI calculation
+    function calculateRSI(prices, period = 14) {
+      if (prices.length < period + 1) return null;
+
+      let gains = [];
+      let losses = [];
+
+      // Calculate gains and losses
+      for (let i = 1; i < prices.length; i++) {
+        const change = prices[i] - prices[i-1];
+        gains.push(change > 0 ? change : 0);
+        losses.push(change < 0 ? Math.abs(change) : 0);
+      }
+
+      // Calculate first average gain and loss
+      let avgGain = gains.slice(0, period).reduce((a, b) => a + b, 0) / period;
+      let avgLoss = losses.slice(0, period).reduce((a, b) => a + b, 0) / period;
+
+      const rsiValues = Array(prices.length).fill(null); // First `period` will be null
+
+      // The first RSI value
+      if (avgLoss === 0) {
+        rsiValues[period] = 100;
+      } else {
+        const rs = avgGain / avgLoss;
+        rsiValues[period] = 100 - (100 / (1 + rs));
+      }
+
+      // Calculate subsequent RSI values
+      for (let i = period + 1; i < prices.length; i++) {
+        const gain = gains[i - 1];
+        const loss = losses[i - 1];
+
+        avgGain = (avgGain * (period - 1) + gain) / period;
+        avgLoss = (avgLoss * (period - 1) + loss) / period;
+
+        if (avgLoss === 0) {
+          rsiValues[i] = 100;
+        } else {
+          const rs = avgGain / avgLoss;
+          rsiValues[i] = 100 - (100 / (1 + rs));
+        }
+      }
+
+      return rsiValues;
+    }
+
+    // Fixed RSI Divergence detection
+    function detectRSIDivergence(prices, rsiValues, lookback = 10) {
+      if (!prices || !rsiValues || prices.length < lookback || rsiValues.length < lookback) {
+        return null;
+      }
+
+      // Get last prices and RSI values
+      const recentPrices = prices.slice(-lookback);
+      const recentRSI = rsiValues.slice(-lookback);
+
+      // Find peaks and troughs for prices
+      const pricePeaks = [];
+      const priceTroughs = [];
+      for (let i = 1; i < recentPrices.length - 1; i++) {
+        if (recentPrices[i] > recentPrices[i-1] && recentPrices[i] > recentPrices[i+1]) {
+          pricePeaks.push({index: i, value: recentPrices[i]});
+        }
+        if (recentPrices[i] < recentPrices[i-1] && recentPrices[i] < recentPrices[i+1]) {
+          priceTroughs.push({index: i, value: recentPrices[i]});
+        }
+      }
+
+      // Find peaks and troughs for RSI
+      const rsiPeaks = [];
+      const rsiTroughs = [];
+      for (let i = 1; i < recentRSI.length - 1; i++) {
+        if (recentRSI[i] > recentRSI[i-1] && recentRSI[i] > recentRSI[i+1]) {
+          rsiPeaks.push({index: i, value: recentRSI[i]});
+        }
+        if (recentRSI[i] < recentRSI[i-1] && recentRSI[i] < recentRSI[i+1]) {
+          rsiTroughs.push({index: i, value: recentRSI[i]});
+        }
+      }
+
+      // Check for bearish divergence (price makes higher high, RSI makes lower high)
+      if (pricePeaks.length >= 2 && rsiPeaks.length >= 2) {
+        const lastPricePeak = pricePeaks[pricePeaks.length - 1];
+        const prevPricePeak = pricePeaks[pricePeaks.length - 2];
+        const lastRSIPeak = rsiPeaks[rsiPeaks.length - 1];
+        const prevRSIPeak = rsiPeaks[rsiPeaks.length - 2];
+
+        if (lastPricePeak.value > prevPricePeak.value &&
+            lastRSIPeak.value < prevRSIPeak.value) {
+          return 'bearish';
+        }
+      }
+
+      // Check for bullish divergence (price makes lower low, RSI makes higher low)
+      if (priceTroughs.length >= 2 && rsiTroughs.length >= 2) {
+        const lastPriceTrough = priceTroughs[priceTroughs.length - 1];
+        const prevPriceTrough = priceTroughs[priceTroughs.length - 2];
+        const lastRSITrough = rsiTroughs[rsiTroughs.length - 1];
+        const prevRSITrough = rsiTroughs[rsiTroughs.length - 2];
+
+        if (lastPriceTrough.value < prevPriceTrough.value &&
+            lastRSITrough.value > prevRSITrough.value) {
+          return 'bullish';
+        }
+      }
+
+      return null;
+    }
+  
     // Get indicator data with swing analysis
     async function getIndicatorData(symbol, timeframe) {
       try {
         const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=100`;
         const res = await fetch(url);
-       
+      
         if (!res.ok) {
           throw new Error(`API error: ${res.status}`);
         }
-       
+      
         const klines = await res.json();
-       
-        if (klines.length < 34) {
+      
+        if (klines.length < 35) {
           return {
             ema34: null,
             emaPercentageDiff: null,
             macd: null,
             marketTrend: null,
             pricePattern: null,
-            patternText: 'Insufficient data'
+            patternText: 'Insufficient data',
+            rsiDivergence: null
           };
         }
-       
+      
         // Extract closing prices and highs/lows
         const closes = klines.map(k => parseFloat(k[4]));
         const highs = klines.map(k => parseFloat(k[2]));
         const lows = klines.map(k => parseFloat(k[3]));
         const currentPrice = closes[closes.length - 1];
-       
+      
         // Calculate EMA 34
         const ema34 = calculateEMA(closes, 34);
-       
-        // Calculate MACD
+      
+        // Calculate MACD with crossover detection
         const macdData = calculateMACD(closes);
-       
+      
         // Determine market trend
         const marketTrend = determineMarketTrend(closes, currentPrice);
-       
+      
         // Find swing points using high/low data
         const swingPointsHighs = findSwingPoints(highs, 3);
         const swingHighs = swingPointsHighs.swingHighs;
         const swingPointsLows = findSwingPoints(lows, 3);
         const swingLows = swingPointsLows.swingLows;
-       
+      
         // Sort swing points by recency
         swingHighs.sort((a, b) => b.index - a.index);
         swingLows.sort((a, b) => b.index - a.index);
-       
+      
         // Get the most recent swing high and low
         const lastSwingHigh = swingHighs.length > 0 ? swingHighs[0] : null;
         const lastSwingLow = swingLows.length > 0 ? swingLows[0] : null;
-       
+      
         // Determine price pattern based on swing points
         let pricePattern = 'none';
         let patternText = 'None';
-       
+      
         if (lastSwingHigh && lastSwingLow) {
           if (currentPrice > lastSwingHigh.price) {
             pricePattern = 'higher-high';
@@ -1102,23 +1218,28 @@
             patternText = `Consolidation`;
           }
         }
-       
+      
         // Calculate percentage difference from EMA 34
         let emaPercentageDiff = null;
         if (ema34 !== null && currentPrice !== null) {
           emaPercentageDiff = ((currentPrice - ema34) / ema34) * 100;
         }
-       
+
+        // Calculate RSI and detect divergence
+        const rsiValues = calculateRSI(closes);
+        const rsiDivergence = detectRSIDivergence(closes, rsiValues, 10);
+      
         return {
           ema34: ema34,
           emaStatus: ema34 ? (currentPrice > ema34 ? 'above' : 'below') : null,
           emaPercentageDiff: emaPercentageDiff,
-          macd: macdData ? (macdData.bullish ? 'bullish' : 'bearish') : null,
+          macd: macdData,
           marketTrend: marketTrend,
           pricePattern: pricePattern,
           patternText: patternText,
           lastSwingHigh: lastSwingHigh,
-          lastSwingLow: lastSwingLow
+          lastSwingLow: lastSwingLow,
+          rsiDivergence: rsiDivergence
         };
       } catch (error) {
         console.error(`Error getting indicator data for ${symbol} (${timeframe}):`, error);
@@ -1128,33 +1249,34 @@
           macd: null,
           marketTrend: null,
           pricePattern: null,
-          patternText: 'Error'
+          patternText: 'Error',
+          rsiDivergence: null
         };
       }
     }
-   
+  
     // Create table rows for cryptocurrencies
     function createTableRows(cryptos) {
       // Clear existing content
       screenerBody.innerHTML = '';
-     
+    
       if (cryptos.length === 0) {
         screenerBody.innerHTML = `
           <tr>
-            <td colspan="16" class="loading">No cryptocurrencies found matching your search</td>
+            <td colspan="18" class="loading">No cryptocurrencies found matching your search</td>
           </tr>
         `;
         return;
       }
-     
+    
       // Create rows for each cryptocurrency
       cryptos.forEach(symbol => {
         const symbolName = symbol.replace('USDT', '');
-       
+      
         // Create table row with TradingView link
         const row = document.createElement('tr');
         row.id = `row-${symbol}`;
-       
+      
         row.innerHTML = `
           <td>
             <div class="symbol-cell">
@@ -1188,7 +1310,7 @@
           <td class="data-cell" id="volatility-${symbol}">
             <div class="loading">...</div>
           </td>
-          <td class="data-cell" id极="change-${symbol}-1w">
+          <td class="data-cell" id="change-${symbol}-1w">
             <div class="loading">...</div>
           </td>
           <td class="data-cell" id="change-${symbol}-1M">
@@ -1200,6 +1322,9 @@
           <td class="data-cell" id="macd-${symbol}">
             <div class="loading">...</div>
           </td>
+          <td class="data-cell" id="crossover-${symbol}">
+            <div class="loading">...</div>
+          </td>
           <td class="data-cell" id="trend-${symbol}">
             <div class="loading">...</div>
           </td>
@@ -1209,30 +1334,33 @@
           <td class="data-cell correlation-cell" id="correlation-${symbol}">
             <div class="loading">...</div>
           </td>
+          <td class="data-cell" id="rsi-divergence-${symbol}">
+            <div class="loading">...</div>
+          </td>
         `;
-       
+      
         screenerBody.appendChild(row);
       });
     }
-   
+  
     // Update data elements without clearing the entire table
     async function updateData() {
       try {
         updateTimestamp();
         currentTimeframe = timeframeSelect.value;
-       
+      
         // Get cryptocurrencies for current page
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const cryptosToUpdate = filteredCryptocurrencies.slice(startIndex, endIndex);
-       
+      
         if (cryptosToUpdate.length === 0) {
           createTableRows([]);
           return;
         }
-       
+      
         statusBar.textContent = `Updating ${cryptosToUpdate.length} cryptocurrencies...`;
-       
+      
         // Instead of clearing the table, update existing rows
         for (const symbol of cryptosToUpdate) {
           try {
@@ -1243,93 +1371,93 @@
               get24hVolatility(symbol),
               getCorrelationWithBTC(symbol)
             ]);
-           
+          
             const symbolName = symbol.replace('USDT', '');
             const priceFormatted = formatCurrency(price);
             const dailyChange = parseFloat(changes['24h']);
-           
+          
             // Update price in table
             const priceCell = document.getElementById(`price-${symbol}`);
             if (!priceCell) continue;
-           
+          
             const oldPrice = parseFloat(priceCell.dataset.value || 0);
-           
+          
             // Apply transition animation
             priceCell.classList.add('value-transition');
             priceCell.innerHTML = `<strong>${priceFormatted}</strong>`;
             priceCell.dataset.value = price;
-           
+          
             // Add price direction class with animation
             if (oldPrice > 0) {
               priceCell.classList.remove('price-up', 'price-down');
               priceCell.classList.add(price > oldPrice ? 'price-up' : 'price-down');
-             
+            
               // Add background animation for value change
               priceCell.classList.remove('value-up', 'value-down');
               priceCell.classList.add(price > oldPrice ? 'value-up' : 'value-down');
-             
+            
               // Remove animation classes after completion
               setTimeout(() => {
                 priceCell.classList.remove('value-up', 'value-down');
               }, 800);
             }
-           
+          
             // Update changes in table
             Object.keys(intervals).forEach(i => {
               const val = changes[i];
               const changeNum = parseFloat(val);
               const cls = changeNum >= 0 ? 'up' : 'down';
               const bgCls = changeNum >= 0 ? 'positive-bg' : 'negative-bg';
-             
+            
               const changeCell = document.getElementById(`change-${symbol}-${i}`);
               if (!changeCell) return;
-             
+            
               // Apply smooth transition
               changeCell.classList.add('value-transition');
               changeCell.innerHTML = `<span class="${cls}">${val}%</span>`;
               changeCell.className = `data-cell ${bgCls}`;
-             
+            
               // Add highlight animation
               changeCell.classList.add('updating');
-             
+            
               // Remove highlight class after animation completes
               setTimeout(() => {
                 changeCell.classList.remove('updating');
               }, 800);
             });
-           
+          
             // Update volatility
             const volCell = document.getElementById(`volatility-${symbol}`);
             if (volCell) {
               volCell.innerHTML = `${volatility}%`;
               volCell.classList.add('value-transition');
             }
-           
+          
             // Update correlation with BTC
             const correlationCell = document.getElementById(`correlation-${symbol}`);
             if (correlationCell) {
               let correlationValue = 'N/A';
               let correlationClass = '';
-             
+            
               if (correlation !== null) {
                 correlationValue = (correlation * 100).toFixed(2) + '%';
                 correlationClass = correlation > 0.6 ? 'correlation-positive' :
                                  correlation < 0.4 ? 'correlation-negative' : '';
               }
-             
+            
               correlationCell.innerHTML = `
                 <span class="${correlationClass}">${correlationValue}</span>
               `;
               correlationCell.classList.add('value-transition');
             }
-           
+          
             // Update EMA 34 status with percentage difference
             const emaCell = document.getElementById(`ema34-${symbol}`);
             if (emaCell && indicators.emaStatus && indicators.emaPercentageDiff !== null) {
               // Format percentage with sign
               const sign = indicators.emaPercentageDiff >= 0 ? '+' : '';
               const formattedPercentage = `${sign}${indicators.emaPercentageDiff.toFixed(2)}%`;
-             
+            
               emaCell.classList.add('value-transition');
               emaCell.innerHTML = `
                 <div class="ema-indicator ${indicators.emaStatus === 'above' ? 'ema-above' : 'ema-below'}">
@@ -1338,23 +1466,44 @@
               `;
               emaCell.classList.add('updating');
             } else if (emaCell) {
-              emaCell.innerHTML = `<span class="down">Error</span>`;
+              emaCell.innerHTML = `<span class="indicator-error">N/A</span>`;
             }
-           
+          
             // Update MACD status
             const macdCell = document.getElementById(`macd-${symbol}`);
             if (macdCell && indicators.macd) {
               macdCell.classList.add('value-transition');
               macdCell.innerHTML = `
-                <div class="macd-indicator ${indicators.macd === 'bullish' ? 'macd-bullish' : 'macd-bearish'}">
-                  ${indicators.macd === 'bullish' ? 'Bullish' : 'Bearish'}
+                <div class="macd-indicator ${indicators.macd.bullish ? 'macd-bullish' : 'macd-bearish'}">
+                  ${indicators.macd.bullish ? 'Bullish' : 'Bearish'}
                 </div>
               `;
               macdCell.classList.add('updating');
             } else if (macdCell) {
-              macdCell.innerHTML = `<span class="down">Error</span>`;
+              macdCell.innerHTML = `<span class="indicator-error">N/A</span>`;
             }
-           
+          
+            // Update MACD Crossover
+            const crossoverCell = document.getElementById(`crossover-${symbol}`);
+            if (crossoverCell && indicators.macd) {
+              crossoverCell.classList.add('value-transition');
+             
+              if (indicators.macd.crossover === 'bullish') {
+                crossoverCell.innerHTML = `
+                  <div class="macd-bullish">Bullish Cross</div>
+                `;
+              } else if (indicators.macd.crossover === 'bearish') {
+                crossoverCell.innerHTML = `
+                  <div class="macd-bearish">Bearish Cross</div>
+                `;
+              } else {
+                crossoverCell.innerHTML = `N/A`;
+              }
+              crossoverCell.classList.add('updating');
+            } else if (crossoverCell) {
+              crossoverCell.innerHTML = `<span class="indicator-error">N/A</span>`;
+            }
+          
             // Update market trend
             const trendCell = document.getElementById(`trend-${symbol}`);
             if (trendCell && indicators.marketTrend) {
@@ -1366,15 +1515,15 @@
               `;
               trendCell.classList.add('updating');
             } else if (trendCell) {
-              trendCell.innerHTML = `<span class="down">Error</span>`;
+              trendCell.innerHTML = `<span class="indicator-error">N/A</span>`;
             }
-           
+          
             // Update price pattern
             const patternCell = document.getElementById(`pattern-${symbol}`);
             if (patternCell && indicators.pricePattern) {
               patternCell.classList.add('value-transition');
               let patternClass = '';
-             
+            
               switch(indicators.pricePattern) {
                 case 'higher-high':
                   patternClass = 'pattern-higher-high';
@@ -1388,33 +1537,47 @@
                 default:
                   patternClass = 'pattern-none';
               }
-             
+            
               patternCell.innerHTML = `
                 <div class="${patternClass}">
                   ${indicators.patternText}
                 </div>
               `;
               patternCell.classList.add('updating');
-             
+            
               // Store pattern data for search
               swingPatternData[symbol] = indicators.patternText.toLowerCase();
             } else if (patternCell) {
-              patternCell.innerHTML = `<span class="down">Error</span>`;
+              patternCell.innerHTML = `<span class="indicator-error">N/A</span>`;
             }
-           
+
+            // Update RSI Divergence
+            const rsiDivCell = document.getElementById(`rsi-divergence-${symbol}`);
+            if (rsiDivCell) {
+              rsiDivCell.classList.add('value-transition');
+              if (indicators.rsiDivergence === 'bullish') {
+                rsiDivCell.innerHTML = `<div class="rsi-bullish-div">Bullish</div>`;
+              } else if (indicators.rsiDivergence === 'bearish') {
+                rsiDivCell.innerHTML = `<div class="rsi-bearish-div">Bearish</div>`;
+              } else {
+                rsiDivCell.innerHTML = `None`;
+              }
+              rsiDivCell.classList.add('updating');
+            }
+          
           } catch (error) {
             console.error(`Error updating ${symbol}:`, error);
           }
         }
-       
+      
         statusBar.textContent = `Displaying ${cryptosToUpdate.length} of ${filteredCryptocurrencies.length} cryptocurrencies (Page ${currentPage} of ${Math.ceil(filteredCryptocurrencies.length / itemsPerPage)})`;
-       
+      
       } catch (error) {
         console.error('Error updating data:', error);
         statusBar.textContent = `Error updating data: ${error.message}`;
       }
     }
-   
+  
     // Search cryptocurrencies by symbol
     function searchBySymbol(searchTerm) {
       if (!searchTerm) {
@@ -1424,12 +1587,12 @@
           symbol.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
-     
+    
       currentPage = 1;
       createTableRows(filteredCryptocurrencies.slice(0, itemsPerPage));
       updateData();
     }
-   
+  
     // Search cryptocurrencies by swing pattern
     function searchByPattern(searchTerm) {
       if (!searchTerm) {
@@ -1440,68 +1603,68 @@
           return pattern.includes(searchTerm.toLowerCase());
         });
       }
-     
+    
       currentPage = 1;
       createTableRows(filteredCryptocurrencies.slice(0, itemsPerPage));
       updateData();
     }
-   
+  
     // Fetch all Binance USDT pairs
     async function fetchAllUSDTpairs() {
       try {
         statusBar.textContent = "Fetching all Binance USDT pairs...";
         const res = await fetch('https://api.binance.com/api/v3/exchangeInfo');
-       
+      
         if (!res.ok) {
           throw new Error(`API error: ${res.status}`);
         }
-       
+      
         const data = await res.json();
-       
+      
         // Filter symbols that are trading and end with USDT
         const usdtPairs = data.symbols
           .filter(s => s.quoteAsset === 'USDT' && s.status === 'TRADING')
           .map(s => s.symbol);
-       
+      
         allCryptocurrencies = usdtPairs;
         filteredCryptocurrencies = [...usdtPairs];
-       
+      
         statusBar.textContent = `Found ${usdtPairs.length} USDT trading pairs`;
-       
+      
         // Create initial table with first page
         createTableRows(filteredCryptocurrencies.slice(0, itemsPerPage));
         updateData();
-       
+      
       } catch (error) {
         console.error('Error fetching USDT pairs:', error);
         statusBar.textContent = `Error loading USDT pairs: ${error.message}`;
         screenerBody.innerHTML = `
           <tr>
-            <td colspan="16" class="loading">Error loading cryptocurrency data: ${error.message}</td>
+            <td colspan="18" class="loading">Error loading cryptocurrency data: ${error.message}</td>
           </tr>
         `;
       }
     }
-   
+  
     // Initial setup
     fetchAllUSDTpairs();
-   
+  
     // Refresh every 30 seconds
     const refreshInterval = setInterval(updateData, 30000);
-   
+  
     // Manual refresh button
     refreshBtn.addEventListener('click', () => {
       updateData();
-     
+    
       // Add visual feedback
       refreshBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="spin">
           <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-          <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.极36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+          <path d="M8 4.466V.534a.25.25 0 0 1 .极41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
         </svg>
         Refreshing...
       `;
-     
+    
       setTimeout(() => {
         refreshBtn.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -1512,35 +1675,35 @@
         `;
       }, 1000);
     });
-   
+  
     // Timeframe change handler
     timeframeSelect.addEventListener('change', () => {
       updateData();
       lastUpdatedEl.textContent = "Updating indicators...";
     });
-   
+  
     // Symbol search functionality
     symbolSearchBtn.addEventListener('click', () => {
       searchBySymbol(symbolSearchInput.value);
     });
-   
+  
     symbolSearchInput.addEventListener('keyup', (e) => {
       if (e.key === 'Enter') {
         searchBySymbol(symbolSearchInput.value);
       }
     });
-   
+  
     // Pattern search functionality
     patternSearchBtn.addEventListener('click', () => {
       searchByPattern(patternSearchInput.value.toLowerCase());
     });
-   
+  
     patternSearchInput.addEventListener('keyup', (e) => {
       if (e.key === 'Enter') {
         searchByPattern(patternSearchInput.value.toLowerCase());
       }
     });
-   
+  
     // Pagination
     prevBtn.addEventListener('click', () => {
       if (currentPage > 1) {
@@ -1549,7 +1712,7 @@
         updateData();
       }
     });
-   
+  
     nextBtn.addEventListener('click', () => {
       const totalPages = Math.ceil(filteredCryptocurrencies.length / itemsPerPage);
       if (currentPage < totalPages) {
@@ -1558,7 +1721,7 @@
         updateData();
       }
     });
-   
+  
     // Add spin animation for refresh icon
     const style = document.createElement('style');
     style.innerHTML = `
